@@ -1,0 +1,13 @@
+{
+  "name": "jamlink-vercel",
+  "version": "2.0.0",
+  "private": true,
+  "description": "YouTube video Jam rooms with Upstash Redis room state for Vercel",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node --watch server.mjs",
+    "test": "node --test test/redis-store.test.mjs test/api.test.mjs test/room.test.mjs"
+  }
+}

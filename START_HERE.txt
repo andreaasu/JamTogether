@@ -1,0 +1,20 @@
+JAMLINK — VERCEL DEPLOYMENT
+==========================
+
+This ZIP has the finished web app, Vercel config, and Redis-backed Jam rooms.
+No experimental audio mode. Only YouTube video playback.
+
+IMPORTANT: THE ZIP IS NOT YET ONLINE. YOU MUST:
+
+1. Upload the CONTENTS of the inner jamlink folder to your GitHub repo.
+2. Create an Upstash Redis Free database.
+3. Import your GitHub repo in Vercel (Hobby, framework Other).
+4. Add these 3 secret environment variables to Vercel:
+   YOUTUBE_API_KEY
+   UPSTASH_REDIS_REST_URL
+   UPSTASH_REDIS_REST_TOKEN
+5. Deploy and open https://YOUR-URL.vercel.app/api/health
+6. Create a room, send the link to a friend, test both devices.
+
+Full click-by-click deployment steps are in README.md.
+Never upload your local .env file or share its secret values.

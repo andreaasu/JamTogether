@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0d11" />
+  <meta name="description" content="Make a room, drop a link, share the queue. Collaborative listening for everybody." />
+  <title>Jamlink — Listen together, from anywhere</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <header class="site-header">
+    <a class="logo" href="/" id="home-link" aria-label="Jamlink home"><span class="logo-mark"><span></span><span></span><span></span><span></span></span>jamlink<span class="logo-dot">.</span></a>
+    <div class="header-right"><span class="pill pill-soft"><span class="pulse-dot"></span> LIVE MUSIC ROOMS</span><a class="header-help" href="https://developers.google.com/youtube/iframe_api_reference" target="_blank" rel="noopener">About the player <span aria-hidden="true">↗</span></a></div>
+  </header>
+
+  <main id="lobby" class="landing-wrap">
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="small-star">✳</span> YOUR MUSIC. YOUR PEOPLE. ONE ROOM.</div>
+        <h1>Good music<br />is <em>better</em><br /><span>together.</span></h1>
+        <p>Start a listening room. Send a link. Everyone can add songs, skip tracks, and control the vibe — live from any device.</p>
+        <div class="hero-chips"><span>✦ No download</span><span>✦ Works on iPhone</span><span>✦ Everyone's the DJ</span></div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="art-glow"></div>
+        <div class="record-record"><div class="record-inner"><div class="record-label"><span>JAM<br/>LINK</span><small>VOL. 001</small></div></div></div>
+        <div class="floating-chip chip-a">♫ <span>Now playing</span><strong>Good vibes only</strong></div>
+        <div class="floating-chip chip-b"><span class="mini-avatar a1">M</span><span class="mini-avatar a2">J</span><span class="mini-avatar a3">A</span><span>3 listening</span></div>
+        <div class="art-star star-1">✳</div><div class="art-star star-2">✳</div>
+      </div>
+    </section>
+    <section class="entry-section">
+      <div class="entry-lead"><span class="section-kicker">01 / GET CONNECTED</span><h2>Ready to<br /><em>start a jam?</em></h2><p>Make a room in seconds, or hop into an existing one with your friends.</p></div>
+      <div class="entry-card">
+        <label for="lobby-name">WHAT SHOULD WE CALL YOU?</label>
+        <input id="lobby-name" maxlength="28" placeholder="Your name" autocomplete="nickname" />
+        <button class="primary large" id="create-btn">Create a Jam <span>↗</span></button>
+        <div class="or-line"><span>or join your friends</span></div>
+        <div class="code-line"><input id="join-code" maxlength="100" placeholder="Room code or invite link" aria-label="Room code or invite link" /><button id="join-btn" class="secondary">Join <span>→</span></button></div>
+        <div class="entry-note">No account needed. Just music and good company.</div>
+      </div>
+    </section>
+    <section class="how-row"><div><span class="how-num">01</span><strong>Create a room</strong><span>Get a shareable link in one click</span></div><div><span class="how-num">02</span><strong>Invite the crew</strong><span>They join on any browser</span></div><div><span class="how-num">03</span><strong>Pass the aux</strong><span>Everyone adds and controls songs</span></div></section>
+    <footer class="footer">Built for shared listening. Audio plays through an official, visible YouTube embed. © Jamlink.</footer>
+  </main>
+
+  <main id="room-view" class="room-wrap hidden">
+    <div class="room-heading"><div><div class="eyebrow room-eyebrow">✳ CONNECTED MUSIC, IN REAL TIME</div><h1>You're in the <em>Jam.</em></h1><div class="room-meta"><span class="live-badge"><span class="pulse-dot"></span> LIVE ROOM</span><span class="room-code-text">ROOM <b id="room-code">------</b></span><span id="online-count">0 listening</span><span id="host-status" class="host-status">♛ Host</span></div></div><div class="room-actions"><button id="invite-btn" class="primary">↗ Share invite link</button><button id="leave-btn" class="ghost">Leave room</button></div></div>
+    <div class="room-columns">
+      <section class="panel discover-panel">
+        <div class="panel-title"><div class="iconbox">⌕</div><div><h2>Find your sound</h2><p>Search tracks or paste a link</p></div></div>
+        <form id="search-form" class="search-line"><input id="search-input" autocomplete="off" type="search" placeholder="Search songs or artists" aria-label="Search YouTube music" /><button class="search-button" aria-label="Search"><span>⌕</span></button></form>
+        <div id="search-note" class="search-note">Search via YouTube Data API. Add a key to enable results.</div>
+        <div id="search-results" class="results-list" aria-live="polite"><div class="empty-search"><span class="disc-icon">♫</span><strong>Find your next favorite</strong><small>Search for a song, then add it to the queue.</small></div></div>
+        <div class="paste-box"><div class="paste-title"><span>↗</span> GOT A YOUTUBE LINK?</div><form id="paste-form"><input id="paste-url" placeholder="Paste YouTube video URL" aria-label="YouTube link" /><input id="paste-title" placeholder="Song title (optional)" aria-label="Song title (optional)" maxlength="120" /><button type="submit" class="secondary block">＋ Add link to the queue</button></form></div>
+      </section>
+
+      <section class="panel playing-panel"><div class="panel-title playing-title"><div class="iconbox lime">♫</div><div><h2>Now playing</h2><p>One room, one shared vibe</p></div><span class="equalizer">▂▆▄▇▃</span></div>
+        <div id="player-mode-note" class="mode-explanation">Official YouTube player. Video data is used; quality can be lowered in player settings.</div>
+        <div id="video-shell" class="video-shell"><div id="video-empty" class="video-placeholder"><div class="video-music-icon">♫</div><b>Nothing playing yet</b><small>Add a song to start the party</small></div><div id="yt-player-holder" class="yt-player-holder hidden"><div id="yt-player"></div></div></div>
+        <div class="song-title-row"><div class="song-text"><h2 id="current-title">Queue up your first track</h2><p id="current-artist">The room is waiting for you</p></div><span class="music-badge">♪ MUSIC</span></div>
+        <div id="audio-prompt" class="audio-prompt hidden"><div><b>🔊 Listening on this device</b><small>Safari may need a tap before sound can start</small></div><button class="primary tiny" id="enable-audio">Enable audio</button></div>
+        <div class="progress"><input id="progress" type="range" min="0" max="100" step="0.1" value="0" aria-label="Seek in track" /><div class="time-row"><span id="elapsed">0:00</span><span id="duration">--:--</span></div></div>
+        <div class="playback-controls"><button id="prev-btn" title="Previous track" aria-label="Previous track">|◀</button><button id="back-btn" title="Back 10 seconds" aria-label="Back 10 seconds">↶ <small>10</small></button><button id="play-btn" class="play-big" title="Play or pause" aria-label="Play or pause">▶</button><button id="forward-btn" title="Forward 10 seconds" aria-label="Forward 10 seconds">↷ <small>10</small></button><button id="next-btn" title="Next track" aria-label="Next track">▶|</button></div>
+        <div class="sync-note"><span class="pulse-dot"></span><span id="sync-message">Waiting for the first song</span></div>
+      </section>
+
+      <section class="panel queue-panel"><div class="panel-title"><div class="iconbox">≡</div><div><h2>Up next</h2><p id="queue-count">0 tracks in queue</p></div><button class="text-button" id="clear-btn" title="Clear upcoming queue">Clear</button></div><div id="queue-list" class="queue-list"><div class="empty-queue"><span>♬</span><strong>It's quiet in here</strong><small>Add a song and set the mood.</small></div></div><div class="people-box"><div class="people-header"><h3>In the room</h3><span id="people-count">0 people</span></div><div id="people-list" class="people-list"></div><div class="invite-inline"><span>Bring someone along</span><button id="copy-inline" aria-label="Copy invite link">Copy link ↗</button></div></div></section>
+    </div>
+    <footer class="room-footer">Music plays through the visible YouTube embedded player. iPhone playback may require a tap, and synchronization is approximate. <a href="https://developers.google.com/youtube/terms/api-services-terms-of-service" target="_blank" rel="noopener">Terms ↗</a></footer>
+  </main>
+
+  <div id="join-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="join-modal-title"><div class="modal-card"><span class="section-kicker">YOU'VE BEEN INVITED</span><div class="modal-icon">✳</div><h2 id="join-modal-title">Get in on<br /><em>the Jam.</em></h2><p>You're joining room <strong id="modal-room-code"></strong>. Pick a name and jump in.</p><label for="modal-name">YOUR NAME</label><input id="modal-name" maxlength="28" placeholder="Your name" autocomplete="nickname" /><button id="modal-join-btn" class="primary block large">Join the room <span>↗</span></button><button class="ghost block" id="cancel-modal">Back to home</button></div></div>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
