@@ -155,7 +155,28 @@ function enterRoom(roomCode, newToken, initial) {
   };
   const pollingTimer = setInterval(refresh, 2800);
   const heartbeatTimer = setInterval(heartbeat, 7000);
-  const onVisible = () => { if (document.visibilityState === 'visible') { heartbeat(); refresh(); } };
+
+const onVisible = () => {
+  if (document.visibilityState !== 'visible') return;
+
+  heartbeat();
+  refresh();
+
+  if (
+    snapshot?.current &&
+    snapshot.playback.playing &&
+    playerReady &&
+    player
+  ) {
+    try {
+      if (player.getPlayerState() !== 1) {
+        audioEnabled = false;
+        lastAppliedPlayState = null;
+        $('audio-prompt').classList.remove('hidden');
+      }
+    } catch {}
+  }
+};
   document.addEventListener('visibilitychange', onVisible);
   source = { close() { closed = true; clearInterval(pollingTimer); clearInterval(heartbeatTimer); document.removeEventListener('visibilitychange', onVisible); } };
   refresh();
@@ -306,21 +327,43 @@ function syncVideo(before) {
   }
   if (playerReady) remotePlayState();
 }
+
 function onPlayerState(event) {
   if (!snapshot?.current) return;
+
   const state = event.data;
-  if (state === 0) { // Track ended: server rejects duplicate skip requests by expectedVideoId.
-    action('NEXT', { expectedVideoId: playerVideo });
-    return;
-  }
+
   if (state === 1) {
     audioEnabled = true;
     $('audio-prompt').classList.add('hidden');
   }
-  if (Date.now() < suppressionUntil) return;
-  if (state === 1 && !snapshot.playback.playing) action('PLAY');
-  if (state === 2 && snapshot.playback.playing) action('PAUSE');
+
+  // A local pause must NOT pause the entire Jam.
+  if (
+    state === 2 &&
+    snapshot.playback.playing &&
+    Date.now() >= suppressionUntil &&
+    document.visibilityState === 'visible'
+  ) {
+    audioEnabled = false;
+    $('audio-prompt').classList.remove('hidden');
+  }
+
+  // Only move to the next song when it genuinely ends.
+  if (state !== 0) return;
+  if (
+    document.visibilityState !== 'visible' ||
+    !snapshot.playback.playing ||
+    Date.now() < suppressionUntil
+  ) return;
+
+  const duration = durationOf();
+
+  if (duration <= 0 || positionOf() < duration - 2.5) return;
+
+  action('NEXT', { expectedVideoId: playerVideo });
 }
+
 function tick() {
   if (!snapshot) return;
   const current = snapshot.current;
